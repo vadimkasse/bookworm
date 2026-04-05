@@ -1,0 +1,14 @@
+embedding:
+  dimensions: 1024
+  model: BAAI/bge-m3
+indexing:
+  batch_size: 16
+  chunk_size: 1500
+  overlap: 150
+qdrant:
+  collection: bookworm
+  path: ./qdrant_data
+server:
+  name: bookworm
+vault:
+  path: /path/to/your/documents

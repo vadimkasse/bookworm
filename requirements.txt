@@ -1,0 +1,21 @@
+# Bookworm — Dependencies
+# Everything runs locally, no paid APIs.
+
+# Local embeddings
+sentence-transformers>=3.0
+torch
+
+# Vector database
+qdrant-client>=1.9
+
+# MCP server for Claude Desktop
+mcp>=1.0
+
+# Text extraction
+python-docx>=1.0
+PyMuPDF>=1.24
+striprtf>=0.0.26
+
+# Utilities
+PyYAML>=6.0
+tqdm>=4.66
