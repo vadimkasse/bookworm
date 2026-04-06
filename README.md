@@ -1,4 +1,4 @@
-# Bookworm
+# BOOKWORM
 
 Your AI reading companion. Point Bookworm at any folder — Obsidian vault, research papers, book collection, work docs — and Claude Desktop will read, remember, and discuss everything in it.
 
