@@ -1,26 +1,18 @@
 # Bookworm
 
-Turn Claude Desktop into an expert on your documents.
+Your AI reading companion. Point Bookworm at any folder — Obsidian vault, research papers, book collection, work docs — and Claude Desktop will read, remember, and discuss everything in it.
 
-Point Bookworm at any folder — Obsidian vault, research papers, book collection, work docs — and Claude will read, remember, and discuss everything in it. Like NotebookLM, but through Claude Desktop.
+Like NotebookLM, but local, open-source, and through Claude Desktop.
 
 ## How it works
 
-```
-Your documents (md, txt, pdf, docx, csv, rtf)
-    ↓
-Index (local embeddings, free)
-    ↓
-Search (semantic + full-text)
-    ↓
-Claude Desktop (MCP)
-    ↓
-Ask anything, get expert answers
-```
+Your documents (books, notes, articles, code, data) ↓ Index locally (free, no API costs) ↓ Claude Desktop reads it all via MCP ↓ Ask anything → get expert answers
+
+Bookworm uses local embeddings (BGE-M3) and a local vector database (Qdrant) to index your documents. Claude Desktop connects to this index via MCP (Model Context Protocol) and uses it as memory — not as a search engine, but as knowledge it has "read."
 
 ## Quick Start
 
-### 1. Clone and install
+### Step 1. Clone and install
 
 ```bash
 git clone https://github.com/vadimkasse/bookworm.git
@@ -30,39 +22,42 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-First run downloads the embedding model (~2GB).
+The first run will download the embedding model (~2GB). This only happens once.
 
-### 2. Configure
+### Step 2. Point to your documents
 
-Edit `config.yaml` — set the path to your document folder:
+Edit `config.yaml` and set the path to your folder:
 
 ```yaml
 vault:
-  path: "/path/to/your/documents"
+  path: "/Users/yourname/Documents/my-notes"
 ```
 
-### 3. Check setup
+This can be any folder: an Obsidian vault, a folder with PDFs, a mix of books and notes — anything.
+
+### Step 3. Check that everything is ready
 
 ```bash
 python3 check_status.py
 ```
 
-### 4. Index your documents
+You should see all green checkmarks. If something is missing, the script will tell you what to fix.
+
+### Step 4. Index your documents
 
 ```bash
 python3 index.py
 ```
 
-This scans your folder, extracts text from all supported files, splits into chunks, and creates local embeddings. On Apple Silicon: ~1 minute per 1000 files. Cost: $0.
+This scans your folder, extracts text from all supported files, splits it into chunks, and creates embeddings. Performance: ~1 minute per 1000 files on Apple Silicon. Cost: $0 (everything runs locally).
 
-### 5. Connect to Claude Desktop
+Indexing is incremental — when you add new files, just run `python3 index.py` again. Only new files will be processed.
 
-Open Claude Desktop settings → Edit Config (or edit the file directly):
+### Step 5. Connect to Claude Desktop
 
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+Open Claude Desktop → click your profile icon (bottom-left) → Settings → Developer → Edit Config.
 
-Add to `mcpServers`:
+This opens `claude_desktop_config.json`. Add bookworm to `mcpServers`:
 
 ```json
 {
@@ -75,43 +70,86 @@ Add to `mcpServers`:
 }
 ```
 
-⚠️ Use absolute paths. `~` does not work.
+**Important:** Use full absolute paths. `~` and relative paths do not work.
 
-### 6. Restart Claude Desktop
+Example for macOS:
 
-Close and reopen. You should see the 🔧 icon in a new chat — that's MCP.
+```json
+{
+  "mcpServers": {
+    "bookworm": {
+      "command": "/Users/yourname/Projects/bookworm/venv/bin/python3",
+      "args": ["/Users/yourname/Projects/bookworm/search_mcp.py"]
+    }
+  }
+}
+```
 
-### 7. (Optional) Set up the system prompt
+Save the file.
 
-Copy the template from `system_prompt.md` into your Claude Desktop project's system prompt. Replace the placeholders. This makes Claude behave as an expert rather than a search engine.
+### Step 6. Restart Claude Desktop
+
+Fully quit Claude Desktop (Cmd+Q on macOS, not just close the window) and reopen it.
+
+### Step 7. Verify the connection
+
+Open Claude Desktop → Settings → Developer. You should see bookworm with a green "running" status.
+
+Then open a new chat, click the + button next to the message input, and look for bookworm in the tools list — it should be toggled on.
+
+**Recommended model:** Use Claude Sonnet 4.6 or Opus for best results. Haiku may struggle with complex search strategies.
+
+### Step 8. (Optional) Set up a system prompt
+
+For the best experience, create a Project in Claude Desktop:
+
+1. Open the sidebar → Projects → New Project
+2. In project settings, paste the contents of `system_prompt.md` as the system prompt
+3. Replace the placeholders (`{SOURCE_NAME}`, `{TOTAL_ITEMS}`, `{DOMAIN}`) with your values
+4. Start chats inside this project
+
+The system prompt makes Claude behave as an expert who has read your entire collection, rather than a search engine that returns results.
 
 ## Usage
 
-Just talk to Claude:
+Just talk to Claude naturally:
 
 - "What do you know about typography in the collection?"
 - "Find all mentions of Edward Tufte"
 - "What's in the Books folder?"
 - "Summarize the key ideas from design_principles.pdf"
 - "How many documents are in the database?"
+- "What books in my library discuss systems thinking?"
 
-Claude picks the right tool automatically.
+Claude picks the right search tool automatically — semantic search for topics, full-text search for specific names and phrases, and full document retrieval when needed.
+
+## Supported formats
+
+**Documents & notes:** .md, .txt, .pdf, .docx, .rtf
+
+**Books:** .epub
+
+**Data:** .csv, .tsv, .json
+
+**Web:** .html, .htm
+
+**Code & configs:** .py, .js, .ts, .yaml, .yml, .sh, .sql, .xml, .log
+
+**Subtitles:** .vtt, .srt
 
 ## Tools
+
+Bookworm gives Claude 5 tools to work with your knowledge base:
 
 | Tool | What it does |
 |------|-------------|
 | `search` | Semantic search — finds relevant chunks by meaning |
-| `fulltext` | Substring search — scans entire database, finds all matches |
-| `get_note` | Full text of a specific file |
-| `list_notes` | Browse files, filter by folder |
-| `stats` | Database statistics |
+| `fulltext` | Substring search — scans the entire database for exact matches |
+| `get_note` | Retrieves the full text of a specific file |
+| `list_notes` | Lists files in the knowledge base, with optional folder filter |
+| `stats` | Shows database statistics: total chunks, files, folders |
 
-## Supported formats
-
-.md, .txt, .docx, .pdf, .csv, .tsv, .rtf
-
-## Updating
+## Updating your index
 
 When you add new documents to your folder:
 
@@ -121,14 +159,35 @@ source venv/bin/activate
 python3 index.py
 ```
 
-Indexing is incremental — only new files are processed.
+Only new files are indexed — existing ones are skipped.
+
+## Troubleshooting
+
+**"bookworm" not showing in Claude Desktop tools:**
+
+- Check Settings → Developer — is bookworm "running"?
+- Verify paths in `claude_desktop_config.json` are absolute
+- Fully restart Claude Desktop (Cmd+Q, not just close)
+- Check MCP logs: `cat ~/Library/Logs/Claude/mcp*.log | tail -20`
+
+**Claude doesn't use the tools:**
+
+- Click + next to message input → make sure bookworm toggle is ON
+- Try asking directly: "Use your search tools to find..."
+- Switch to Sonnet or Opus (Haiku may not use tools effectively)
+
+**Indexing is slow:**
+
+- Normal speed: ~1 min per 1000 files on Apple Silicon
+- First run downloads the model (~2GB) — subsequent runs are faster
+- Use `python3 index.py --test` to index only 100 files for testing
 
 ## Stack
 
 - Python 3.10+
-- [BGE-M3](https://huggingface.co/BAAI/bge-m3) embeddings (local, multilingual)
-- [Qdrant](https://qdrant.tech/) vector database (local, on disk)
-- [MCP](https://modelcontextprotocol.io/) (Model Context Protocol)
+- BGE-M3 — local multilingual embeddings
+- Qdrant — local vector database
+- MCP — Model Context Protocol
 - Claude Desktop
 
 ## Project structure
@@ -136,10 +195,10 @@ Indexing is incremental — only new files are processed.
 ```
 bookworm/
 ├── config.yaml        — settings (paths, model, chunking)
-├── parser.py          — text extraction from 7 file formats
-├── chunker.py         — smart chunking (by headings, separators, or sliding window)
-├── index.py           — indexing: parse → chunk → embed → Qdrant
-├── search_mcp.py      — MCP server (5 tools)
+├── parser.py          — text extraction from 20+ file formats
+├── chunker.py         — smart chunking (headings → paragraphs → sliding window)
+├── index.py           — indexing pipeline: parse → chunk → embed → store
+├── search_mcp.py      — MCP server with 5 tools
 ├── check_status.py    — setup diagnostics
 ├── system_prompt.md   — Claude Desktop prompt template
 ├── requirements.txt   — dependencies
@@ -148,4 +207,4 @@ bookworm/
 
 ## License
 
-MIT
+Apache 2.0 — see [LICENSE](LICENSE) for details.

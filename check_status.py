@@ -31,6 +31,8 @@ def check_packages():
         "docx": "python-docx",
         "fitz": "PyMuPDF",
         "striprtf": "striprtf",
+        "ebooklib": "EbookLib",
+        "bs4": "beautifulsoup4",
     }
     ok = True
     for module, pip_name in packages.items():
@@ -65,7 +67,9 @@ def check_config():
         return False
 
     # Count supported files
-    supported = {'.md', '.txt', '.docx', '.pdf', '.csv', '.tsv', '.rtf'}
+    supported = {'.md', '.txt', '.docx', '.pdf', '.csv', '.tsv', '.rtf',
+                 '.epub', '.html', '.htm', '.json', '.py', '.js', '.ts',
+                 '.yaml', '.yml', '.log', '.sh', '.sql', '.xml', '.vtt', '.srt'}
     file_count = 0
     for f in vault_path.rglob('*'):
         if f.is_file() and f.suffix.lower() in supported:
