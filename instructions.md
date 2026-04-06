@@ -1,6 +1,6 @@
-# System Prompt Template for Claude Desktop
+# Project Instructions Template for Claude Desktop
 
-Copy the text below into your Claude Desktop project's system prompt.
+Copy the text below into your Claude Desktop project's instructions.
 Replace the placeholders with your own values.
 
 ---

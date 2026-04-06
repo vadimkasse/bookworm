@@ -113,16 +113,16 @@ Then open a new chat, click the + button next to the message input, and look for
 
 **Recommended model:** Use Claude Sonnet 4.6 or Opus for best results. Haiku may struggle with complex search strategies.
 
-### Step 8. (Optional) Set up a system prompt
+### Step 8. (Optional) Set up a project instructions
 
 For the best experience, create a Project in Claude Desktop:
 
 1. Open the sidebar → Projects → New Project
-2. In project settings, paste the contents of `system_prompt.md` as the system prompt
+2. In project settings, paste the contents of `instructions.md` as the project instructions
 3. Replace the placeholders (`{SOURCE_NAME}`, `{TOTAL_ITEMS}`, `{DOMAIN}`) with your values
 4. Start chats inside this project
 
-The system prompt makes Claude behave as an expert who has read your entire collection, rather than a search engine that returns results.
+The project instructions makes Claude behave as an expert who has read your entire collection, rather than a search engine that returns results.
 
 ## Usage
 
@@ -200,7 +200,7 @@ bookworm/
 ├── index.py           — indexing pipeline: parse → chunk → embed → store
 ├── search_mcp.py      — MCP server with 5 tools
 ├── check_status.py    — setup diagnostics
-├── system_prompt.md   — Claude Desktop prompt template
+├── instructions.md   — Claude Desktop prompt template
 ├── requirements.txt   — dependencies
 └── qdrant_data/       — vector database (created on first index)
 ```
