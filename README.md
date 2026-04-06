@@ -23,7 +23,7 @@ Ask anything, get expert answers
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/yourusername/bookworm.git
+git clone https://github.com/vadimkasse/bookworm.git
 cd bookworm
 python3 -m venv venv
 source venv/bin/activate
