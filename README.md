@@ -4,6 +4,12 @@ Your AI reading companion. Point Bookworm at any folder — Obsidian vault, rese
 
 Like NotebookLM, but local, open-source, and through Claude Desktop.
 
+## How it works
+
+Your documents (books, notes, articles, code, data) ↓ Index locally (free, no API costs) ↓ Claude Desktop reads it all via MCP ↓ Ask anything → get expert answers
+
+Bookworm uses local embeddings (BGE-M3) and a local vector database (Qdrant) to index your documents. Claude Desktop connects to this index via MCP (Model Context Protocol) and uses it as memory — not as a search engine, but as knowledge it has "read."
+
 ## Supported formats
 
 **Documents & notes:** .md, .txt, .pdf, .docx, .rtf
@@ -17,12 +23,6 @@ Like NotebookLM, but local, open-source, and through Claude Desktop.
 **Code & configs:** .py, .js, .ts, .yaml, .yml, .sh, .sql, .xml, .log
 
 **Subtitles:** .vtt, .srt
-
-## How it works
-
-Your documents (books, notes, articles, code, data) ↓ Index locally (free, no API costs) ↓ Claude Desktop reads it all via MCP ↓ Ask anything → get expert answers
-
-Bookworm uses local embeddings (BGE-M3) and a local vector database (Qdrant) to index your documents. Claude Desktop connects to this index via MCP (Model Context Protocol) and uses it as memory — not as a search engine, but as knowledge it has "read."
 
 ## Quick Start
 
