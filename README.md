@@ -4,6 +4,20 @@ Your AI reading companion. Point Bookworm at any folder — Obsidian vault, rese
 
 Like NotebookLM, but local, open-source, and through Claude Desktop.
 
+## Supported formats
+
+**Documents & notes:** .md, .txt, .pdf, .docx, .rtf
+
+**Books:** .epub
+
+**Data:** .csv, .tsv, .json
+
+**Web:** .html, .htm
+
+**Code & configs:** .py, .js, .ts, .yaml, .yml, .sh, .sql, .xml, .log
+
+**Subtitles:** .vtt, .srt
+
 ## How it works
 
 Your documents (books, notes, articles, code, data) ↓ Index locally (free, no API costs) ↓ Claude Desktop reads it all via MCP ↓ Ask anything → get expert answers
@@ -122,20 +136,6 @@ Just talk to Claude naturally:
 - "What books in my library discuss systems thinking?"
 
 Claude picks the right search tool automatically — semantic search for topics, full-text search for specific names and phrases, and full document retrieval when needed.
-
-## Supported formats
-
-**Documents & notes:** .md, .txt, .pdf, .docx, .rtf
-
-**Books:** .epub
-
-**Data:** .csv, .tsv, .json
-
-**Web:** .html, .htm
-
-**Code & configs:** .py, .js, .ts, .yaml, .yml, .sh, .sql, .xml, .log
-
-**Subtitles:** .vtt, .srt
 
 ## Tools
 
