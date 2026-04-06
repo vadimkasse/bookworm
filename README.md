@@ -24,8 +24,6 @@ Bookworm uses local embeddings (BGE-M3) and a local vector database (Qdrant) to 
 
 **Subtitles:** .vtt, .srt
 
-
-
 ## Quick Start
 
 ### Step 1. Clone and install
@@ -125,8 +123,6 @@ For the best experience, create a Project in Claude Desktop:
 4. Start chats inside this project
 
 The system prompt makes Claude behave as an expert who has read your entire collection, rather than a search engine that returns results.
-
-
 
 ## Usage
 
